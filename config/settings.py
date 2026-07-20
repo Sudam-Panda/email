@@ -21,21 +21,13 @@ SECRET_KEY = os.getenv(
     "wxvywb7_!27gpm9ev#yzy-=#z6g+_y)f%8eo1(&n7gp8%6y%-l"
 )
 
-<<<<<<< HEAD
-# DEBUG = os.getenv("DEBUG", "True") == "True"
-DEBUG = True
-=======
 DEBUG = os.getenv("DEBUG", "False") == "True"
->>>>>>> c0c799f (Added WhiteNoise)
 
 ALLOWED_HOSTS = os.getenv(
     "ALLOWED_HOSTS",
     "127.0.0.1,localhost,email-tx9j.onrender.com"
 ).split(",")
 
-
-# Add this line
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # ======================================
 # Installed Apps
 # ======================================
@@ -57,13 +49,16 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+
+    # WhiteNoise should come immediately after SecurityMiddleware
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -143,6 +138,8 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 # ======================================
 # Default Primary Key
 # ======================================
@@ -150,7 +147,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ======================================
-# Gmail SMTP
+# Email Configuration
 # ======================================
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -163,4 +160,5 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 EMAIL_TIMEOUT = 20
