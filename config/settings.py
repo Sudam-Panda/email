@@ -21,14 +21,21 @@ SECRET_KEY = os.getenv(
     "wxvywb7_!27gpm9ev#yzy-=#z6g+_y)f%8eo1(&n7gp8%6y%-l"
 )
 
+<<<<<<< HEAD
 # DEBUG = os.getenv("DEBUG", "True") == "True"
 DEBUG = True
+=======
+DEBUG = os.getenv("DEBUG", "False") == "True"
+>>>>>>> c0c799f (Added WhiteNoise)
 
 ALLOWED_HOSTS = os.getenv(
     "ALLOWED_HOSTS",
     "127.0.0.1,localhost,email-tx9j.onrender.com"
 ).split(",")
 
+
+# Add this line
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # ======================================
 # Installed Apps
 # ======================================
@@ -56,6 +63,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = "config.urls"
