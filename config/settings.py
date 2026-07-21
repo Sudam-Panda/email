@@ -18,15 +18,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv(
     "SECRET_KEY",
-    "wxvywb7_!27gpm9ev#yzy-=#z6g+_y)f%8eo1(&n7gp8%6y%-l"
+    "django-insecure-change-this-secret-key"
 )
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = os.getenv(
     "ALLOWED_HOSTS",
-    "127.0.0.1,localhost,email-tx9j.onrender.com"
+    "127.0.0.1,localhost,email-6ztc.onrender.com"
 ).split(",")
+
+# Render HTTPS Settings
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
 
 # ======================================
 # Installed Apps
@@ -49,8 +53,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-
-    # WhiteNoise should come immediately after SecurityMiddleware
     "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -138,7 +140,9 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
 
 # ======================================
 # Default Primary Key
