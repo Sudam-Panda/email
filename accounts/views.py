@@ -1,4 +1,5 @@
 import random
+import traceback
 
 from django.conf import settings
 from django.core.mail import send_mail
@@ -24,7 +25,21 @@ def login_page(request):
         )
 
         try:
+            print("=" * 60)
             print("Sending email to:", email)
+            print("EMAIL_BACKEND:", settings.EMAIL_BACKEND)
+            print("EMAIL_HOST:", settings.EMAIL_HOST)
+            print("EMAIL_PORT:", settings.EMAIL_PORT)
+            print("EMAIL_USE_TLS:", settings.EMAIL_USE_TLS)
+            print("EMAIL_HOST_USER:", settings.EMAIL_HOST_USER)
+            print("DEFAULT_FROM_EMAIL:", settings.DEFAULT_FROM_EMAIL)
+
+            if settings.EMAIL_HOST_PASSWORD:
+                print("EMAIL_HOST_PASSWORD: Loaded Successfully")
+            else:
+                print("EMAIL_HOST_PASSWORD: NOT FOUND")
+
+            print("=" * 60)
 
             send_mail(
                 subject="Your Login OTP",
@@ -46,16 +61,32 @@ MyShow Team
             print("✅ Email sent successfully.")
 
         except Exception as e:
-            print("SMTP ERROR:", str(e))
 
-            # Show OTP for testing if email fails
-            return HttpResponse(f"""
+            print("=" * 60)
+            print("SMTP ERROR")
+            print(type(e))
+            print(repr(e))
+            traceback.print_exc()
+            print("=" * 60)
+
+            return HttpResponse(
+                f"""
                 <h2>Email Sending Failed</h2>
-                <p><b>Error:</b> {e}</p>
-                <hr>
+
+                <b>Error Type:</b><br>
+                {type(e)}<br><br>
+
+                <b>Error:</b><br>
+                {e}<br><br>
+
                 <h3>Generated OTP (Testing Only)</h3>
                 <h2>{otp}</h2>
-            """)
+
+                <hr>
+
+                <pre>{traceback.format_exc()}</pre>
+                """
+            )
 
         return redirect(f"/verify/?email={email}")
 
@@ -63,6 +94,7 @@ MyShow Team
 
 
 def verify_otp(request):
+
     email = request.GET.get("email")
 
     if request.method == "POST":
@@ -93,6 +125,7 @@ def verify_otp(request):
             )
 
         except EmailOTP.DoesNotExist:
+
             return render(
                 request,
                 "accounts/verify_otp.html",
